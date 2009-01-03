@@ -16,12 +16,12 @@ B<Psych> is an interpreter for Urban ME<0xFC>ller's Brainfuck programming
 language (see L</"BRAINFUCK"> below).  In addition to the standard features of
 the language, B<Psych> provides a small amount of customization through its
 command-line options, and it also allows the programmer to include single-line
-comments in the code beginning with the character C<#>.
+comments in the code with C<#>.
 
 By default, B<Psych> reads Brainfuck source code from the specified file or, if
 no file is given on the command line, from standard input (though execution
-will not begin until EOF is reached).  If the B<-e> switch is used, the given
-file (if any) will be ignored.
+will not begin until EOF is reached).  If the B<-e> switch is used (see below),
+the given file (if any) will be ignored.
 
 Regarding the "implementation-defined" aspects of the language, moving the
 pointer beyond the bounds of the array in either direction will cause it to
@@ -40,17 +40,19 @@ Set the size of the data array to I<number> elements (default 30,000)
 
 =item B<-b>
 
-Turn off input buffering for the C<,> command.  Note that, if input is from a
-terminal, the EOF condition is not recognized while this is in effect.
+If input is from a terminal, disable canonical input for the C<,> command,
+thereby causing characters to be read as soon as they are typed.  Note that
+B<Psych> may be configured at compile-time not to have this feature, in which
+case a warning message will be printed to standard error.
 
 =item B<-d>
 
-Make C<.> output values as numbers rather than characters
+Make C<.> output values as numbers rather than as characters
 
 =item B<-e> I<code>
 
 Execute the given Brainfuck code.  Note that, if multiple B<-e> switches are
-given, each piece of code counts as a single line of the same program.
+given, each piece of code is taken to be a single line of the same program.
 Specifying one or more B<-e> options will also cause any source files named on
 the command line to be ignored.
 
@@ -137,7 +139,7 @@ L<http://esoteric.sange.fi/brainfuck/>
 
 =head1 AUTHOR
 
-John T. Wodder II <minimiscience@users.sourceforge.net>
+John T. Wodder II <jwodder@sdf.lonestar.org>
 
 =head1 COPYRIGHT
 

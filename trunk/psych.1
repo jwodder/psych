@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PSYCH 1"
-.TH PSYCH 1 "2008-02-13" "Psych 1.0" ""
+.TH PSYCH 1 "2009-01-03" "Psych 1.0.1" ""
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -142,12 +142,12 @@
 language (see \*(L"\s-1BRAINFUCK\s0\*(R" below).  In addition to the standard features of
 the language, \fBPsych\fR provides a small amount of customization through its
 command-line options, and it also allows the programmer to include single-line
-comments in the code beginning with the character \f(CW\*(C`#\*(C'\fR.
+comments in the code with \f(CW\*(C`#\*(C'\fR.
 .PP
 By default, \fBPsych\fR reads Brainfuck source code from the specified file or, if
 no file is given on the command line, from standard input (though execution
-will not begin until \s-1EOF\s0 is reached).  If the \fB\-e\fR switch is used, the given
-file (if any) will be ignored.
+will not begin until \s-1EOF\s0 is reached).  If the \fB\-e\fR switch is used (see below),
+the given file (if any) will be ignored.
 .PP
 Regarding the \*(L"implementation-defined\*(R" aspects of the language, moving the
 pointer beyond the bounds of the array in either direction will cause it to
@@ -162,15 +162,17 @@ implementation.
 Set the size of the data array to \fInumber\fR elements (default 30,000)
 .IP "\fB\-b\fR" 4
 .IX Item "-b"
-Turn off input buffering for the \f(CW\*(C`,\*(C'\fR command.  Note that, if input is from a
-terminal, the \s-1EOF\s0 condition is not recognized while this is in effect.
+If input is from a terminal, disable canonical input for the \f(CW\*(C`,\*(C'\fR command,
+thereby causing characters to be read as soon as they are typed.  Note that
+\&\fBPsych\fR may be configured at compile-time not to have this feature, in which
+case a warning message will be printed to standard error.
 .IP "\fB\-d\fR" 4
 .IX Item "-d"
-Make \f(CW\*(C`.\*(C'\fR output values as numbers rather than characters
+Make \f(CW\*(C`.\*(C'\fR output values as numbers rather than as characters
 .IP "\fB\-e\fR \fIcode\fR" 4
 .IX Item "-e code"
 Execute the given Brainfuck code.  Note that, if multiple \fB\-e\fR switches are
-given, each piece of code counts as a single line of the same program.
+given, each piece of code is taken to be a single line of the same program.
 Specifying one or more \fB\-e\fR options will also cause any source files named on
 the command line to be ignored.
 .IP "\fB\-h\fR" 4
@@ -243,7 +245,7 @@ these values.
 <http://esoteric.sange.fi/brainfuck/>
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-John T. Wodder \s-1II\s0 <minimiscience@users.sourceforge.net>
+John T. Wodder \s-1II\s0 <jwodder@sdf.lonestar.org>
 .SH "COPYRIGHT"
 .IX Header "COPYRIGHT"
 Copyright 2007, 2008 by John T. Wodder \s-1II\s0
