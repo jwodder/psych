@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
      "Psych is distributed under the GNU General Public License v.3\n"
      "Configuration details:\n"
      "  Size of array cells: %zu byte(s)\n"
-     "  Default length of array: %d\n\n"
+     "  Default length of data array: %d\n"
      "  Support for noncanonical input processing "
 #ifdef ALLOW_TERMIOS
      "enabled"
