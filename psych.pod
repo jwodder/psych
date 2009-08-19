@@ -43,7 +43,7 @@ Set the size of the data array to I<number> elements (default 30,000)
 If input is from a terminal, disable canonical input for the C<,> command,
 thereby causing characters to be read as soon as they are typed.  Note that
 B<Psych> may be configured at compile-time not to have this feature, in which
-case a warning message will be printed to standard error.
+case a warning message will be printed to standard error instead.
 
 =item B<-d>
 
@@ -58,7 +58,7 @@ the command line to be ignored.
 
 =item B<-h>
 
-Display summaries of the Brainfuck commands and exit
+Display a summary of the Brainfuck commands and exit
 
 =item B<-i>
 
@@ -66,8 +66,8 @@ Suppress warnings about invalid characters in the source code
 
 =item B<-p> I<number>
 
-Print the values of the first I<number> elements of the data array as numbers
-on program termination
+Print the numeric values of the first I<number> elements of the data array on
+program termination
 
 =item B<-V>
 
@@ -128,10 +128,12 @@ All other characters are ignored.
 =head1 NOTES
 
 The default array length and size of the array cells (30,000 and 1 byte,
-respectively) may be reconfigured at compile time; run C<psych -V> to confirm
-these values.
+respectively) may be reconfigured at compile time.  Run C<psych -V> to see the
+values for your version.
 
 =head1 SEE ALSO
+
+L<http://www.muppetlabs.com/~breadbox/bf/>
 
 L<http://en.wikipedia.org/wiki/Brainfuck>
 

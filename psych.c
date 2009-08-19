@@ -14,8 +14,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
-/* $Id$ */
-
 #define ALLOW_TERMIOS		/* If defined, allow noncanonical input */
 #define ARRAY_SIZE  30000	/* default array size */
 typedef unsigned char cell;	/* data type of the array */
@@ -87,7 +85,7 @@ int main(int argc, char** argv) {
      "  -a num - Set the size of the array to `num'\n"
      "  -b - Disable canonical input"
 #ifndef ALLOW_TERMIOS
-     " (disabled in this version)"
+     " (not available in this version)"
 #endif
      "\n"
      "  -d - Make `.' output values as numbers\n"

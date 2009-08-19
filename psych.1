@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PSYCH 1"
-.TH PSYCH 1 "2009-01-03" "Psych 1.0.1" ""
+.TH PSYCH 1 "2009-08-18" "Psych 1.0.1" ""
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -165,7 +165,7 @@ Set the size of the data array to \fInumber\fR elements (default 30,000)
 If input is from a terminal, disable canonical input for the \f(CW\*(C`,\*(C'\fR command,
 thereby causing characters to be read as soon as they are typed.  Note that
 \&\fBPsych\fR may be configured at compile-time not to have this feature, in which
-case a warning message will be printed to standard error.
+case a warning message will be printed to standard error instead.
 .IP "\fB\-d\fR" 4
 .IX Item "-d"
 Make \f(CW\*(C`.\*(C'\fR output values as numbers rather than as characters
@@ -177,14 +177,14 @@ Specifying one or more \fB\-e\fR options will also cause any source files named 
 the command line to be ignored.
 .IP "\fB\-h\fR" 4
 .IX Item "-h"
-Display summaries of the Brainfuck commands and exit
+Display a summary of the Brainfuck commands and exit
 .IP "\fB\-i\fR" 4
 .IX Item "-i"
 Suppress warnings about invalid characters in the source code
 .IP "\fB\-p\fR \fInumber\fR" 4
 .IX Item "-p number"
-Print the values of the first \fInumber\fR elements of the data array as numbers
-on program termination
+Print the numeric values of the first \fInumber\fR elements of the data array on
+program termination
 .IP "\fB\-V\fR" 4
 .IX Item "-V"
 Display version & configuration information and exit
@@ -236,10 +236,12 @@ All other characters are ignored.
 .SH "NOTES"
 .IX Header "NOTES"
 The default array length and size of the array cells (30,000 and 1 byte,
-respectively) may be reconfigured at compile time; run \f(CW\*(C`psych \-V\*(C'\fR to confirm
-these values.
+respectively) may be reconfigured at compile time.  Run \f(CW\*(C`psych \-V\*(C'\fR to see the
+values for your version.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
+<http://www.muppetlabs.com/~breadbox/bf/>
+.PP
 <http://en.wikipedia.org/wiki/Brainfuck>
 .PP
 <http://esoteric.sange.fi/brainfuck/>
