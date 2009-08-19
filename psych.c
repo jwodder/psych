@@ -22,6 +22,8 @@ typedef unsigned char cell;	/* data type of the array */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <assert.h>
+#include <errno.h>
 #include <unistd.h>
 
 #ifdef ALLOW_TERMIOS
@@ -29,13 +31,15 @@ typedef unsigned char cell;	/* data type of the array */
 #endif
 
 char* program = NULL;
+char* argv0;
 int level = 0;
 struct {_Bool nobuff : 1, digits : 1, eval : 1, ignore : 1; } flags = {0};
 
 void appendLine(char*);
 
 int main(int argc, char** argv) {
- int arraySize = ARRAY_SIZE, ch, printOut = 0;
+ int arraySize = ARRAY_SIZE, printOut = 0, ch;
+ argv0 = argv[0];
  while ((ch = getopt(argc, argv, "a:bde:hip:V?")) != -1) {
   switch (ch) {
    case 'a': arraySize = (int) strtol(optarg, NULL, 10); break;
@@ -43,7 +47,8 @@ int main(int argc, char** argv) {
 #ifdef ALLOW_TERMIOS
     flags.nobuff = 1;
 #else
-    fprintf(stderr, "psych: warning: noncanonical input processing is disabled in this version\n");
+    fprintf(stderr, "%s: warning: noncanonical input processing is disabled in"
+     " this version\n", argv0);
 #endif
     break;
    case 'd': flags.digits = 1; break;
@@ -56,7 +61,7 @@ int main(int argc, char** argv) {
      " -  Decrement value at pointer\n"
      " .  Output character value at pointer\n"
      " ,  Read character and store in value at pointer\n"
-     " [  Skip to corresponding ] if value at pointer is 0\n"
+     " [  Skip to corresponding ] if value at pointer is zero\n"
      " ]  Skip back to corresponding [ unless value at pointer is zero\n");
     return 0;
    case 'i': flags.ignore = 1; break;
@@ -80,7 +85,7 @@ int main(int argc, char** argv) {
     return 0;
    case '?':
    default:
-    printf("Usage: psych [-bdi] [-hV?] [-a num] [-p num] [-e code | file]\n\n"
+    printf("Usage: %s [-bdi] [-hV?] [-a num] [-p num] [-e code | file]\n\n"
      "Options:\n"
      "  -a num - Set the size of the array to `num'\n"
      "  -b - Disable canonical input"
@@ -94,23 +99,23 @@ int main(int argc, char** argv) {
      "  -i - Ignore invalid characters in source\n"
      "  -p num - Print the first `num' elements of the array on termination\n"
      "  -V - Display version & configuration information and exit\n"
-     "  -? - Display this help message & exit\n");
+     "  -? - Display this help message & exit\n", argv0);
     exit(2);
   }
  }
  if (!flags.eval) {
-  FILE* bf;
-  if (optind < argc && !(argv[optind][0] == '-' && argv[optind][1] == '\0'))
-   bf = fopen(argv[optind], "r");
-  else bf = stdin;
+  FILE* bf = (optind < argc && !(argv[optind][0] == '-'
+   && argv[optind][1] == '\0')) ? fopen(argv[optind], "r") : stdin;
   if (bf == NULL) {
-   fprintf(stderr, "psych: %s: ", argv[optind]);
-   perror(NULL);
+   fprintf(stderr, "%s: %s: %s\n", argv0, argv[optind], strerror(errno));
    exit(5);
   }
   char str[256];
   while (fgets(str, 256, bf) != NULL) appendLine(str);
-  if (ferror(bf)) {perror("psych: error reading file"); exit(4); }
+  if (ferror(bf)) {
+   fprintf(stderr, "%s: error reading file: %s\n", argv0, strerror(errno));
+   exit(4);
+  }
   fclose(bf);
  }
  if (program == NULL || program[0] == '\0') return 0;
@@ -119,12 +124,12 @@ int main(int argc, char** argv) {
   if (level < 0) level *= -1;
   /* Unmatched closing brackets should always be detected by appendLine(), but
    * just in case... */
-  fprintf(stderr, "psych: program contains %d unmatched %s bracket%s\n", level,
-   desc, level == 1 ? "" : "s");
+  fprintf(stderr, "%s: program contains %d unmatched %s bracket%s\n",
+   argv0, level, desc, level == 1 ? "" : "s");
   exit(3);
  }
  cell* dataArray = calloc(arraySize, sizeof(cell));
- if (dataArray == NULL) {perror("psych"); exit(1); }
+ if (dataArray == NULL) {perror(argv0); exit(1); }
 #ifdef ALLOW_TERMIOS
  struct termios oldTerm;
  if (flags.nobuff && isatty(STDIN_FILENO)) {
@@ -134,8 +139,12 @@ int main(int argc, char** argv) {
    breakTerm.c_cc[VMIN] = 1;
    breakTerm.c_cc[VTIME] = 0;
    if (tcsetattr(STDIN_FILENO, TCSANOW, &breakTerm) != 0)
-    perror("psych: could not disable canonical input");
-  } else {perror("psych: could not disable canonical input"); }
+    fprintf(stderr, "%s: could not disable canonical input: %s\n",
+     argv0, strerror(errno));
+  } else {
+   fprintf(stderr, "%s: could not disable canonical input: %s\n",
+    argv0, strerror(errno));
+  }
  }
 #endif
  cell* p = dataArray;
@@ -149,31 +158,23 @@ int main(int argc, char** argv) {
    case '.': if (flags.digits) printf("%d ", *p); else putchar(*p); break;
    case ',': if ((ch = getchar()) != EOF) *p = (cell) ch; break;
    /* Note that EOF is not recognized in noncanonical input mode. */
-   case '[': if (*p == 0) {
+   case '[':
+    if (*p == 0) {
      level = 1;
      while (level != 0) {
       q++;
+      assert(*q != '\0');  /* `*q' should never be NUL. */
       if (*q == '[') level++;
       else if (*q == ']') level--;
-      else if (*q == '\0') {
-       /* This should never happen. */
-       fprintf(stderr, "\npsych: program contains %d unmatched opening"
-        " bracket%s\n", level, level == 1 ? "" : "s");
-       exit(3);
-      }
      }
     }
     break;
-   case ']': if (*p) {
+   case ']':
+    if (*p != 0) {
      level = 1;
      while (level != 0) {
       q--;
-      if (q < program) {
-       /* This should never happen. */
-       fprintf(stderr, "\npsych: program contains %d unmatched closing"
-	" bracket%s\n", -level, level == -1 ? "" : "s");
-       exit(3);
-      }
+      assert(q >= program);  /* `q' should never be less than `program'. */
       if (*q == ']') level++;
       else if (*q == '[') level--;
      }
@@ -194,7 +195,8 @@ int main(int argc, char** argv) {
  free(program);
 #ifdef ALLOW_TERMIOS
  if (flags.nobuff && isatty(STDIN_FILENO) && tcsetattr(STDIN_FILENO, TCSAFLUSH,
-  &oldTerm) != 0) perror("psych: error restoring canonical input mode");
+  &oldTerm) != 0) fprintf(stderr, "%s: error restoring canonical input mode:"
+  " %s\n", argv0, strerror(errno));
 #endif
  return 0;
 }
@@ -210,11 +212,11 @@ void appendLine(char* s) {
  size_t len = strlen(s);
  if (bufferLen == 0) {
   program = calloc(len+1, sizeof(char));
-  if (!program) {perror("psych"); exit(1); }
+  if (!program) {perror(argv0); exit(1); }
   bufferLen = len + 1;
  } else if (len + progLength + 1 > bufferLen) {
   program = realloc(program, (len+progLength+1) * sizeof(char));
-  if (!program) {perror("psych"); exit(1); }
+  if (!program) {perror(argv0); exit(1); }
   bufferLen = len + progLength + 1;
   memset(program + progLength, '\0', len+1);
  }
@@ -224,7 +226,8 @@ void appendLine(char* s) {
   else if (*s == '[') {level++; *p++ = '['; progLength++; }
   else if (*s == ']') {
    if (--level < 0) {
-    fprintf(stderr, "psych: unmatched closing bracket on line %d\n", lineNo);
+    fprintf(stderr, "%s: unmatched closing bracket on line %d\n",
+     argv0, lineNo);
     exit(3);
    }
    *p++ = ']';
@@ -235,8 +238,8 @@ void appendLine(char* s) {
    else s--;
   } else if (*s == '\n') {lineNo++; inComment=0; }
   else if (!isspace(*s) && !flags.ignore)
-   fprintf(stderr, "psych: invalid character `%c' at line %d discarded\n", *s,
-    lineNo);
+   fprintf(stderr, "%s: invalid character `%c' at line %d discarded\n",
+    argv0, *s, lineNo);
   s++;
  }
 }

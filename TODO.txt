@@ -1,8 +1,7 @@
 - Add support for Ook! input/output/translation? (including Ook!-to-Brainf*ck
   mapping information in the built-in help)
-- Add a switch for suppressing the extra newline output
-- Use assert(3)s in the parts of the code that should never be reached
-- Host this repository on GitHub?
+- Add a switch for suppressing output of the extra newline
+- Host the repository on GitHub?
 - Add a version history to the README
 - When both an -e switch and a filename are given on the command line, execute
   both in the same "environment"?
