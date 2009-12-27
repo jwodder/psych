@@ -33,14 +33,16 @@ typedef unsigned char cell;	/* data type of the array */
 char* program = NULL;
 char* argv0;
 int level = 0;
-struct {_Bool nobuff : 1, digits : 1, eval : 1, ignore : 1; } flags = {0};
+struct {
+ _Bool nobuff : 1, digits : 1, eval : 1, ignore : 1, nonl : 1;
+} flags = {0};
 
 void appendLine(char*);
 
 int main(int argc, char** argv) {
  int arraySize = ARRAY_SIZE, printOut = 0, ch;
  argv0 = argv[0];
- while ((ch = getopt(argc, argv, "a:bde:hip:V?")) != -1) {
+ while ((ch = getopt(argc, argv, "a:bde:hip:V?n")) != -1) {
   switch (ch) {
    case 'a': arraySize = (int) strtol(optarg, NULL, 10); break;
    case 'b':
@@ -65,6 +67,7 @@ int main(int argc, char** argv) {
      " ]  Skip back to corresponding [ unless value at pointer is zero\n");
     return 0;
    case 'i': flags.ignore = 1; break;
+   case 'n': flags.nonl = 1; break;
    case 'p': printOut = (int) strtol(optarg, NULL, 10); break;
    case 'V':
     printf("Psych, a Brainfuck interpreter, v.1.0.1\n"
@@ -72,7 +75,7 @@ int main(int argc, char** argv) {
      "Compiled %s, %s\n"
      "Psych is distributed under the GNU General Public License v.3\n"
      "Configuration details:\n"
-     "  Size of array cells: %zu byte(s)\n"
+     "  Size of array cells: %zu byte%s\n"
      "  Default length of data array: %d\n"
      "  Support for noncanonical input processing "
 #ifdef ALLOW_TERMIOS
@@ -81,7 +84,7 @@ int main(int argc, char** argv) {
      "disabled"
 #endif
      "\nType `man psych', `psych -h', or `psych -?' for help.\n",
-     __DATE__, __TIME__, sizeof(cell), ARRAY_SIZE);
+     __DATE__, __TIME__, sizeof(cell), sizeof(cell) > 1 ? "s" : "", ARRAY_SIZE);
     return 0;
    case '?':
    default:
@@ -97,6 +100,7 @@ int main(int argc, char** argv) {
      "  -e code - Execute given Brainfuck code\n"
      "  -h - Display summaries of the Brainfuck commands and exit\n"
      "  -i - Ignore invalid characters in source\n"
+     "  -n - Do not print a newline on program termination\n"
      "  -p num - Print the first `num' elements of the array on termination\n"
      "  -V - Display version & configuration information and exit\n"
      "  -? - Display this help message & exit\n", argv0);
@@ -183,7 +187,7 @@ int main(int argc, char** argv) {
   }
   q++;
  }
- putchar('\n');
+ if (!flags.nonl) putchar('\n');
  if (printOut > 0) {
   for (int i=0; i<printOut; i++) {
    if (i) putchar(' ');

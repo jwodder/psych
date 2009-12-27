@@ -1,7 +1,15 @@
 - Add support for Ook! input/output/translation? (including Ook!-to-Brainf*ck
   mapping information in the built-in help)
-- Add a switch for suppressing output of the extra newline
-- Host the repository on GitHub?
 - Add a version history to the README
 - When both an -e switch and a filename are given on the command line, execute
   both in the same "environment"?
+- Make the data array automatically increase in size as needed (This should
+  possibly only be in effect when a certain switch is specified so that
+  programs that "loop around" the ends of the data array still work.)
+- Make psych execute (and store) program code while reading it, not just after
+  EOF is reached.  (However, code outside of any brackets should be discarded
+  after being executed.)
+- Add a hexadecimal equivalent of the -d switch
+
+CHANGES SINCE VERSION 1.0.1
+- Added -n switch

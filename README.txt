@@ -11,10 +11,8 @@ the -h switch to print out a short summary of the Brainfuck commands if, say,
 you just can't remember which is the input command & which is the output.
 
 Psych was written by John T. Wodder II <jwodder@sdf.lonestar.org> and is
-licensed under the GNU GPL, version 3.0 or later.  The location of the current
-source tarball will probably be subject to change a bit, though if you have
-access to a Gopher client, you should be able to find it at
-<gopher://sdf.lonestar.org/9/users/jwodder/src/psych-src.tgz>.
+licensed under the GNU GPL, version 3.0 or later.  The source repository for
+Psych can be found on Github at <http://github.com/jwodder/psych>.
 
 
 2. FILE LIST

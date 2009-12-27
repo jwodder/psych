@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "PSYCH 1"
-.TH PSYCH 1 "2009-08-18" "Psych 1.0.1" ""
+.TH PSYCH 1 "2009-12-27" "Psych 1.0.1" ""
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -133,7 +133,7 @@
 \&\fBpsych\fR \- Brainfuck interpreter
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\&\fBpsych\fR [\fB\-bdi\fR] [\fB\-a\fR \fInumber\fR] [\fB\-p\fR \fInumber\fR] [\fB\-e\fR \fIcode\fR | \fIfile\fR]
+\&\fBpsych\fR [\fB\-bdin\fR] [\fB\-a\fR \fInumber\fR] [\fB\-p\fR \fInumber\fR] [\fB\-e\fR \fIcode\fR | \fIfile\fR]
 .PP
 \&\fBpsych\fR [\fB\-hV\fR]
 .SH "DESCRIPTION"
@@ -168,7 +168,7 @@ thereby causing characters to be read as soon as they are typed.  Note that
 case a warning message will be printed to standard error instead.
 .IP "\fB\-d\fR" 4
 .IX Item "-d"
-Make \f(CW\*(C`.\*(C'\fR output values as numbers rather than as characters
+Make \f(CW\*(C`.\*(C'\fR output values as decimal numbers rather than as characters
 .IP "\fB\-e\fR \fIcode\fR" 4
 .IX Item "-e code"
 Execute the given Brainfuck code.  Note that, if multiple \fB\-e\fR switches are
@@ -181,6 +181,9 @@ Display a summary of the Brainfuck commands and exit
 .IP "\fB\-i\fR" 4
 .IX Item "-i"
 Suppress warnings about invalid characters in the source code
+.IP "\fB\-n\fR" 4
+.IX Item "-n"
+Suppress the newline that is usually output on program termination
 .IP "\fB\-p\fR \fInumber\fR" 4
 .IX Item "-p number"
 Print the numeric values of the first \fInumber\fR elements of the data array on

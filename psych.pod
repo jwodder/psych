@@ -6,7 +6,7 @@ B<psych> - Brainfuck interpreter
 
 =head1 SYNOPSIS
 
-B<psych> [B<-bdi>] [B<-a> I<number>] [B<-p> I<number>] [B<-e> I<code> | I<file>]
+B<psych> [B<-bdin>] [B<-a> I<number>] [B<-p> I<number>] [B<-e> I<code> | I<file>]
 
 B<psych> [B<-hV>]
 
@@ -47,7 +47,7 @@ case a warning message will be printed to standard error instead.
 
 =item B<-d>
 
-Make C<.> output values as numbers rather than as characters
+Make C<.> output values as decimal numbers rather than as characters
 
 =item B<-e> I<code>
 
@@ -63,6 +63,10 @@ Display a summary of the Brainfuck commands and exit
 =item B<-i>
 
 Suppress warnings about invalid characters in the source code
+
+=item B<-n>
+
+Suppress the newline that is usually output on program termination
 
 =item B<-p> I<number>
 
