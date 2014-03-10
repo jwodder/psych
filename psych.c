@@ -21,7 +21,6 @@ typedef unsigned char cell;	/* data type of the array */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <assert.h>
 #include <errno.h>
 #include <unistd.h>
@@ -33,9 +32,7 @@ typedef unsigned char cell;	/* data type of the array */
 char* program = NULL;
 char* argv0;
 int level = 0;
-struct {
- _Bool nobuff : 1, digits : 1, eval : 1, ignore : 1, nonl : 1;
-} flags = {0};
+struct {_Bool nobuff : 1, digits : 1, eval : 1, nonl : 1; } flags = {0};
 
 void appendLine(char*);
 _Bool parseInt(const char* num, int* out);
@@ -43,7 +40,7 @@ _Bool parseInt(const char* num, int* out);
 int main(int argc, char** argv) {
  int arraySize = ARRAY_SIZE, printOut = 0, ch, tmp;
  argv0 = argv[0];
- while ((ch = getopt(argc, argv, "a:bde:hip:V?n")) != -1) {
+ while ((ch = getopt(argc, argv, "a:bde:hp:V?n")) != -1) {
   switch (ch) {
    case 'a':
     if (parseInt(optarg, &tmp)) {
@@ -72,7 +69,6 @@ int main(int argc, char** argv) {
 	   " [  Skip to corresponding ] if value at pointer is zero\n"
 	   " ]  Skip back to corresponding [ unless value at pointer is zero\n");
     return 0;
-   case 'i': flags.ignore = 1; break;
    case 'n': flags.nonl = 1; break;
    case 'p':
     if (parseInt(optarg, &tmp)) {
@@ -94,13 +90,13 @@ int main(int argc, char** argv) {
 #else
 	   "disabled"
 #endif
-	   "\nType `man psych', `psych -h', or `psych -?' for help.\n",
+	   "\nType `man psych`, `psych -h`, or `psych -?` for help.\n",
 	   __DATE__, __TIME__, sizeof(cell), sizeof(cell) > 1 ? "s" : "",
 	   ARRAY_SIZE);
     return 0;
    case '?':
    default:
-    printf("Usage: %s [-bdin] [-hV?] [-a num] [-p num] [-e code | file]\n\n"
+    printf("Usage: %s [-bdn] [-hV?] [-a num] [-p num] [-e code | file]\n\n"
 	   "Options:\n"
 	   "  -a num - Set the size of the array to `num'\n"
 	   "  -b - Disable canonical input"
@@ -111,7 +107,6 @@ int main(int argc, char** argv) {
 	   "  -d - Make `.' output values as numbers\n"
 	   "  -e code - Execute given Brainfuck code\n"
 	   "  -h - Display summaries of the Brainfuck commands and exit\n"
-	   "  -i - Ignore invalid characters in source\n"
 	   "  -n - Do not print a newline on program termination\n"
 	   "  -p num - Print the first `num' elements of the array on termination\n"
 	   "  -V - Display version & configuration information and exit\n"
@@ -256,10 +251,6 @@ void appendLine(char* s) {
    if (s == NULL) {inComment = 1; return; }
    else s--;
   } else if (*s == '\n') {lineNo++; inComment=0; }
-  else if (!isspace(*s) && !flags.ignore) {
-   fprintf(stderr, "%s: invalid character `%c' at line %d discarded\n",
-	   argv0, *s, lineNo);
-  }
   s++;
  }
 }

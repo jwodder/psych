@@ -6,7 +6,7 @@ B<psych> - Brainfuck interpreter
 
 =head1 SYNOPSIS
 
-B<psych> [B<-bdin>] [B<-a> I<number>] [B<-p> I<number>] [B<-e> I<code> | I<file>]
+B<psych> [B<-bdn>] [B<-a> I<number>] [B<-p> I<number>] [B<-e> I<code> | I<file>]
 
 B<psych> [B<-hV>]
 
@@ -59,10 +59,6 @@ the command line to be ignored.
 =item B<-h>
 
 Display a summary of the Brainfuck commands and exit
-
-=item B<-i>
-
-Suppress warnings about invalid characters in the source code
 
 =item B<-n>
 
@@ -129,6 +125,9 @@ go back to the matching C<[> if the value at the pointer is nonzero
 
 All other characters are ignored.
 
+This implementation also supports single-line comments beginning with C<#>,
+which can be used to ignore command characters as well.
+
 =head1 NOTES
 
 The default array length and size of the array cells (30,000 and 1 byte,
@@ -136,6 +135,8 @@ respectively) may be reconfigured at compile time.  Run C<psych -V> to see the
 values for your version.
 
 =head1 SEE ALSO
+
+L<http://github.com/jwodder/psych>
 
 L<http://www.muppetlabs.com/~breadbox/bf/>
 

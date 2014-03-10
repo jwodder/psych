@@ -13,9 +13,9 @@
 - Add a switch for setting an initial part of the array before execution
  - e.g., `psych -a 72,101,108,108,111`
  - Support hexadecimal and octal numbers, too
-- Make -i the default behavior?
-- Add #-comments?
 - Add in processing of switches in #! line?
+- Add a new command for dumping the contents of the data array around the
+  pointer, with a command-line option for setting the radius of the dump
 
 CHANGES SINCE VERSION 1.0.1
 - Added -n switch
@@ -23,3 +23,4 @@ CHANGES SINCE VERSION 1.0.1
   invalid arguments better.
 - If the -p switch is given an argument greater than the size of the array, it
   will be clamped to the size of the array.
+- The -i option has been eliminated, and its behavior is now always in effect.
