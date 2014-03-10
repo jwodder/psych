@@ -9,7 +9,10 @@
 - Make psych execute (and store) program code while reading it, not just after
   EOF is reached.  (However, code outside of any brackets should be discarded
   after being executed.)
-- Add a hexadecimal equivalent of the -d switch
+- Add hexadecimal equivalents of the -d and -p switches
+- Add a switch for setting an initial part of the array before execution
+ - e.g., `psych -a 72,101,108,108,111`
+ - Support hexadecimal and octal numbers, too
 
 CHANGES SINCE VERSION 1.0.1
 - Added -n switch
