@@ -38,13 +38,19 @@ struct {
 } flags = {0};
 
 void appendLine(char*);
+_Bool parseInt(const char* num, int* out);
 
 int main(int argc, char** argv) {
- int arraySize = ARRAY_SIZE, printOut = 0, ch;
+ int arraySize = ARRAY_SIZE, printOut = 0, ch, tmp;
  argv0 = argv[0];
  while ((ch = getopt(argc, argv, "a:bde:hip:V?n")) != -1) {
   switch (ch) {
-   case 'a': arraySize = (int) strtol(optarg, NULL, 10); break;
+   case 'a':
+    if (parseInt(optarg, &tmp)) {
+     if (tmp > 0) arraySize = tmp;
+     else fprintf(stderr, "%s: invalid array size %d ignored\n", argv0, tmp);
+    }
+    break;
    case 'b':
 #ifdef ALLOW_TERMIOS
     flags.nobuff = 1;
@@ -68,7 +74,12 @@ int main(int argc, char** argv) {
     return 0;
    case 'i': flags.ignore = 1; break;
    case 'n': flags.nonl = 1; break;
-   case 'p': printOut = (int) strtol(optarg, NULL, 10); break;
+   case 'p':
+    if (parseInt(optarg, &tmp)) {
+     if (tmp >= 0) printOut = tmp;
+     else fprintf(stderr, "%s: invalid length %d ignored\n", argv0, tmp);
+    }
+    break;
    case 'V':
     printf("Psych, a Brainfuck interpreter, v.1.0.1\n"
 	   "Written by John T. Wodder II (jwodder@sdf.lonestar.org)\n"
@@ -89,7 +100,7 @@ int main(int argc, char** argv) {
     return 0;
    case '?':
    default:
-    printf("Usage: %s [-bdi] [-hV?] [-a num] [-p num] [-e code | file]\n\n"
+    printf("Usage: %s [-bdin] [-hV?] [-a num] [-p num] [-e code | file]\n\n"
 	   "Options:\n"
 	   "  -a num - Set the size of the array to `num'\n"
 	   "  -b - Disable canonical input"
@@ -192,6 +203,7 @@ int main(int argc, char** argv) {
  }
  if (!flags.nonl) putchar('\n');
  if (printOut > 0) {
+  if (printOut > arraySize) printOut = arraySize;
   for (int i=0; i<printOut; i++) {
    if (i) putchar(' ');
    printf("%d", dataArray[i]);
@@ -213,7 +225,6 @@ void appendLine(char* s) {
  static size_t progLength = 0, bufferLen = 0;
  static int lineNo = 0;
  static _Bool inComment = 0;
-/* Add in processing of switches in #! line? */
  if (flags.eval) {lineNo++; inComment=0; }
  if (lineNo==0) lineNo++;
  if (inComment && (s = strchr(s, '\n')) == NULL) return;
@@ -251,4 +262,14 @@ void appendLine(char* s) {
   }
   s++;
  }
+}
+
+_Bool parseInt(const char* num, int* out) {
+ char* endp;
+ int i = (int) strtol(num, &endp, 0);
+ /* TODO: Insert overflow/underflow detection */
+ if (endp == num || *endp != '\0') {
+  fprintf(stderr, "%s: `%s' is not an integer\n", argv0, num);
+  return 0;
+ } else {*out = i; return 1; }
 }
