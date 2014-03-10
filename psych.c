@@ -50,66 +50,68 @@ int main(int argc, char** argv) {
     flags.nobuff = 1;
 #else
     fprintf(stderr, "%s: warning: noncanonical input processing is disabled in"
-     " this version\n", argv0);
+		    " this version\n", argv0);
 #endif
     break;
    case 'd': flags.digits = 1; break;
    case 'e': flags.eval = 1; appendLine(optarg); break;
    case 'h':
     printf("Brainfuck commands:\n"
-     " >  Increment pointer\n"
-     " <  Decrement pointer\n"
-     " +  Increment value at pointer\n"
-     " -  Decrement value at pointer\n"
-     " .  Output character value at pointer\n"
-     " ,  Read character and store in value at pointer\n"
-     " [  Skip to corresponding ] if value at pointer is zero\n"
-     " ]  Skip back to corresponding [ unless value at pointer is zero\n");
+	   " >  Increment pointer\n"
+	   " <  Decrement pointer\n"
+	   " +  Increment value at pointer\n"
+	   " -  Decrement value at pointer\n"
+	   " .  Output character value at pointer\n"
+	   " ,  Read character and store in value at pointer\n"
+	   " [  Skip to corresponding ] if value at pointer is zero\n"
+	   " ]  Skip back to corresponding [ unless value at pointer is zero\n");
     return 0;
    case 'i': flags.ignore = 1; break;
    case 'n': flags.nonl = 1; break;
    case 'p': printOut = (int) strtol(optarg, NULL, 10); break;
    case 'V':
     printf("Psych, a Brainfuck interpreter, v.1.0.1\n"
-     "Written by John T. Wodder II (jwodder@sdf.lonestar.org)\n"
-     "Compiled %s, %s\n"
-     "Psych is distributed under the GNU General Public License v.3\n"
-     "Configuration details:\n"
-     "  Size of array cells: %zu byte%s\n"
-     "  Default length of data array: %d\n"
-     "  Support for noncanonical input processing "
+	   "Written by John T. Wodder II (jwodder@sdf.lonestar.org)\n"
+	   "Compiled %s, %s\n"
+	   "Psych is distributed under the GNU General Public License v.3\n"
+	   "Configuration details:\n"
+	   "  Size of array cells: %zu byte%s\n"
+	   "  Default length of data array: %d\n"
+	   "  Support for noncanonical input processing "
 #ifdef ALLOW_TERMIOS
-     "enabled"
+	   "enabled"
 #else
-     "disabled"
+	   "disabled"
 #endif
-     "\nType `man psych', `psych -h', or `psych -?' for help.\n",
-     __DATE__, __TIME__, sizeof(cell), sizeof(cell) > 1 ? "s" : "", ARRAY_SIZE);
+	   "\nType `man psych', `psych -h', or `psych -?' for help.\n",
+	   __DATE__, __TIME__, sizeof(cell), sizeof(cell) > 1 ? "s" : "",
+	   ARRAY_SIZE);
     return 0;
    case '?':
    default:
     printf("Usage: %s [-bdi] [-hV?] [-a num] [-p num] [-e code | file]\n\n"
-     "Options:\n"
-     "  -a num - Set the size of the array to `num'\n"
-     "  -b - Disable canonical input"
+	   "Options:\n"
+	   "  -a num - Set the size of the array to `num'\n"
+	   "  -b - Disable canonical input"
 #ifndef ALLOW_TERMIOS
-     " (not available in this version)"
+	   " (not available in this version)"
 #endif
-     "\n"
-     "  -d - Make `.' output values as numbers\n"
-     "  -e code - Execute given Brainfuck code\n"
-     "  -h - Display summaries of the Brainfuck commands and exit\n"
-     "  -i - Ignore invalid characters in source\n"
-     "  -n - Do not print a newline on program termination\n"
-     "  -p num - Print the first `num' elements of the array on termination\n"
-     "  -V - Display version & configuration information and exit\n"
-     "  -? - Display this help message & exit\n", argv0);
+	   "\n"
+	   "  -d - Make `.' output values as numbers\n"
+	   "  -e code - Execute given Brainfuck code\n"
+	   "  -h - Display summaries of the Brainfuck commands and exit\n"
+	   "  -i - Ignore invalid characters in source\n"
+	   "  -n - Do not print a newline on program termination\n"
+	   "  -p num - Print the first `num' elements of the array on termination\n"
+	   "  -V - Display version & configuration information and exit\n"
+	   "  -? - Display this help message and exit\n", argv0);
     exit(2);
   }
  }
  if (!flags.eval) {
   FILE* bf = (optind < argc && !(argv[optind][0] == '-'
-   && argv[optind][1] == '\0')) ? fopen(argv[optind], "r") : stdin;
+			      && argv[optind][1] == '\0'))
+	      ? fopen(argv[optind], "r") : stdin;
   if (bf == NULL) {
    fprintf(stderr, "%s: %s: %s\n", argv0, argv[optind], strerror(errno));
    exit(5);
@@ -129,7 +131,7 @@ int main(int argc, char** argv) {
   /* Unmatched closing brackets should always be detected by appendLine(), but
    * just in case... */
   fprintf(stderr, "%s: program contains %d unmatched %s bracket%s\n",
-   argv0, level, desc, level == 1 ? "" : "s");
+	  argv0, level, desc, level == 1 ? "" : "s");
   exit(3);
  }
  cell* dataArray = calloc(arraySize, sizeof(cell));
@@ -142,12 +144,13 @@ int main(int argc, char** argv) {
    breakTerm.c_lflag &= ~ICANON;
    breakTerm.c_cc[VMIN] = 1;
    breakTerm.c_cc[VTIME] = 0;
-   if (tcsetattr(STDIN_FILENO, TCSANOW, &breakTerm) != 0)
+   if (tcsetattr(STDIN_FILENO, TCSANOW, &breakTerm) != 0) {
     fprintf(stderr, "%s: could not disable canonical input: %s\n",
-     argv0, strerror(errno));
+	    argv0, strerror(errno));
+   }
   } else {
    fprintf(stderr, "%s: could not disable canonical input: %s\n",
-    argv0, strerror(errno));
+	   argv0, strerror(errno));
   }
  }
 #endif
@@ -198,9 +201,10 @@ int main(int argc, char** argv) {
  free(dataArray);
  free(program);
 #ifdef ALLOW_TERMIOS
- if (flags.nobuff && isatty(STDIN_FILENO) && tcsetattr(STDIN_FILENO, TCSAFLUSH,
-  &oldTerm) != 0) fprintf(stderr, "%s: error restoring canonical input mode:"
-  " %s\n", argv0, strerror(errno));
+ if (flags.nobuff && isatty(STDIN_FILENO)
+		  && tcsetattr(STDIN_FILENO, TCSAFLUSH, &oldTerm) != 0)
+  fprintf(stderr, "%s: error restoring canonical input mode: %s\n",
+	  argv0, strerror(errno));
 #endif
  return 0;
 }
@@ -231,7 +235,7 @@ void appendLine(char* s) {
   else if (*s == ']') {
    if (--level < 0) {
     fprintf(stderr, "%s: unmatched closing bracket on line %d\n",
-     argv0, lineNo);
+	    argv0, lineNo);
     exit(3);
    }
    *p++ = ']';
@@ -241,9 +245,10 @@ void appendLine(char* s) {
    if (s == NULL) {inComment = 1; return; }
    else s--;
   } else if (*s == '\n') {lineNo++; inComment=0; }
-  else if (!isspace(*s) && !flags.ignore)
+  else if (!isspace(*s) && !flags.ignore) {
    fprintf(stderr, "%s: invalid character `%c' at line %d discarded\n",
-    argv0, *s, lineNo);
+	   argv0, *s, lineNo);
+  }
   s++;
  }
 }
