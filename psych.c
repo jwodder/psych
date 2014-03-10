@@ -151,12 +151,12 @@ int main(int argc, char** argv) {
   }
  }
 #endif
- cell* p = dataArray;
+ cell *p = dataArray, *lastCell = dataArray + arraySize - 1;
  char* q = program;
  while (*q != '\0') {
   switch (*q) {
-   case '>': p++; if (p >= dataArray + arraySize) p = dataArray; break;
-   case '<': p--; if (p < dataArray) p = dataArray + arraySize - 1; break;
+   case '>': p++; if (p > lastCell)  p = dataArray; break;
+   case '<': p--; if (p < dataArray) p = lastCell;  break;
    case '+': (*p)++; break;
    case '-': (*p)--; break;
    case '.': if (flags.digits) printf("%d ", *p); else putchar(*p); break;
