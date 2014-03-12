@@ -1,5 +1,5 @@
-/* Psych, v.1.0.1 - a Brainfuck interpreter
-   Copyright (C) 2007, 2008 John T. Wodder II
+/* Psych, v.1.1 - a Brainfuck interpreter
+   Copyright (C) 2007, 2008, 2014 John T. Wodder II
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
     }
     break;
    case 'V':
-    printf("Psych, a Brainfuck interpreter, v.1.0.1\n"
+    printf("Psych, a Brainfuck interpreter, v.1.1\n"
 	   "Written by John T. Wodder II (jwodder@sdf.lonestar.org)\n"
 	   "Compiled %s, %s\n"
 	   "Psych is distributed under the GNU General Public License v.3\n"

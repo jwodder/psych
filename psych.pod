@@ -150,7 +150,7 @@ John T. Wodder II <jwodder@sdf.lonestar.org>
 
 =head1 COPYRIGHT
 
-Copyright 2007, 2008 by John T. Wodder II
+Copyright 2007, 2008, 2014 by John T. Wodder II
 
 B<Psych> is distributed under the GNU General Public License, v.3.0 or later.
 There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR

@@ -45,3 +45,15 @@ that the former will also remake the manpage if the POD source has been
 updated).  Note that, unlike fancier open source projects, there is no `make
 install'; you'll have to move the executable & manpage to their destination
 directories by hand.
+
+
+4. VERSION HISTORY
+
+2014 Mar 12 - v.1.1:
+ - Version history started
+ - Added -n switch
+ - Eliminated -i switch; its behavior is now always in effect
+ - The -a and -p switches now support hexadecimal & octal arguments and handle
+   invalid arguments better.
+ - If the -p switch is given an argument greater than the size of the data
+   array, it will be clamped to the size of the array.

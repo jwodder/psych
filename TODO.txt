@@ -1,26 +1,15 @@
 - Add support for Ook! input/output/translation? (including Ook!-to-Brainf*ck
   mapping information in the built-in help)
-- Add a version history to the README
 - When both an -e switch and a filename are given on the command line, execute
   both in the same "environment"?
-- Make the data array automatically increase in size as needed (This should
-  possibly only be in effect when a certain switch is specified so that
-  programs that "loop around" the ends of the data array still work.)
+- Add a switch to make the data array automatically increase in size as needed
 - Make psych execute (and store) program code while reading it, not just after
-  EOF is reached.  (However, code outside of any brackets should be discarded
-  after being executed.)
-- Add hexadecimal equivalents of the -d and -p switches
-- Add a switch for setting an initial part of the array before execution
- - e.g., `psych -a 72,101,108,108,111`
- - Support hexadecimal and octal numbers, too
-- Add in processing of switches in #! line?
+  EOF is reached.  (Code outside of any brackets should be discarded after
+  being executed.)
+- Add a switch for setting an initial part of the array before execution, e.g.,
+  `psych -A 72,101,108,108,111`  (Support hexadecimal and octal numbers, too)
 - Add a new command for dumping the contents of the data array around the
   pointer, with a command-line option for setting the radius of the dump
-
-CHANGES SINCE VERSION 1.0.1
-- Added -n switch
-- The -a and -p options now support hexadecimal & octal numbers and handle
-  invalid arguments better.
-- If the -p switch is given an argument greater than the size of the array, it
-  will be clamped to the size of the array.
-- The -i option has been eliminated, and its behavior is now always in effect.
+- Add in processing of switches in #! line?
+- Add hexadecimal equivalents of the -d and -p switches?
+- Should the output for the -p switch be comma-delimited?
