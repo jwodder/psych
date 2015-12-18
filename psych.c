@@ -18,6 +18,7 @@
 #define ARRAY_SIZE  30000	/* default array size */
 typedef unsigned char cell;	/* data type of the array */
 
+#define _XOPEN_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
